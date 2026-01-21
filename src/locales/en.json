@@ -1,0 +1,30 @@
+{
+  "landing": {
+    "title": "Welcome to Q-Sort",
+    "description": "Please enter your details to begin.",
+    "name": "Name",
+    "age": "Age",
+    "gender": "Gender",
+    "gender_male": "Male",
+    "gender_female": "Female",
+    "gender_other": "Other",
+    "kpop_preference": "K-pop Preference",
+    "kpop_high": "High",
+    "kpop_medium": "Medium",
+    "kpop_low": "Low",
+    "start_button": "Start Q-Sort"
+  },
+  "sort": {
+    "instruction": "Drag the statements into the pyramid slots based on how much you agree with them.",
+    "agree": "Agree",
+    "disagree": "Disagree",
+    "neutral": "Neutral",
+    "remaining_statements": "Remaining Statements",
+    "finish_button": "Finish"
+  },
+  "finish": {
+    "title": "Thank Key!",
+    "download_button": "Download Data",
+    "restart_button": "Restart"
+  }
+}

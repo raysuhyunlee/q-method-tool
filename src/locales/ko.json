@@ -1,0 +1,30 @@
+{
+  "landing": {
+    "title": "Q-Sort에 오신 것을 환영합니다",
+    "description": "시작하려면 정보를 입력해주세요.",
+    "name": "이름",
+    "age": "나이",
+    "gender": "성별",
+    "gender_male": "남성",
+    "gender_female": "여성",
+    "gender_other": "기타",
+    "kpop_preference": "K-pop 선호도",
+    "kpop_high": "상",
+    "kpop_medium": "중",
+    "kpop_low": "하",
+    "start_button": "Q-Sort 시작하기"
+  },
+  "sort": {
+    "instruction": "진술문을 동의하는 정도에 따라 피라미드 칸에 배치해주세요.",
+    "agree": "동의함",
+    "disagree": "동의하지 않음",
+    "neutral": "중립",
+    "remaining_statements": "남은 진술문",
+    "finish_button": "완료"
+  },
+  "finish": {
+    "title": "감사합니다!",
+    "download_button": "데이터 다운로드",
+    "restart_button": "다시 시작"
+  }
+}
