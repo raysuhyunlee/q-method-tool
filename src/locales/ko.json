@@ -20,7 +20,9 @@
     "disagree": "동의하지 않음",
     "neutral": "중립",
     "remaining_statements": "남은 진술문",
-    "finish_button": "완료"
+    "finish_button": "완료",
+    "stronglyDisagree": "매우 동의하지 않음",
+    "stronglyAgree": "매우 동의함"
   },
   "finish": {
     "title": "감사합니다!",

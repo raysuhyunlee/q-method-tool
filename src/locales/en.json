@@ -20,7 +20,9 @@
     "disagree": "Disagree",
     "neutral": "Neutral",
     "remaining_statements": "Remaining Statements",
-    "finish_button": "Finish"
+    "finish_button": "Finish",
+    "stronglyDisagree": "Strongly Disagree",
+    "stronglyAgree": "Strongly Agree"
   },
   "finish": {
     "title": "Thank Key!",

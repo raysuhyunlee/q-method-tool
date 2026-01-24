@@ -9,7 +9,7 @@ export const generateDistribution = (totalStatements) => {
   // We'll start with a base curve and adjust.
 
   // Standard Q distribution weights (approximate normal)
-  const weights = [2, 3, 4, 5, 6, 5, 4, 3, 2]; // Sum = 34
+  const weights = [1, 2, 4, 6, 7, 6, 4, 2, 1]; // Sum = 33
   const sumWeights = weights.reduce((a, b) => a + b, 0);
 
   if (totalStatements === 0) return {};

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DndContext, DragOverlay, closestCenter, useSensor, useSensors, PointerSensor, TouchSensor, useDroppable } from '@dnd-kit/core';
 import styled from 'styled-components';
 import DraggableCard from './DraggableCard';
@@ -111,6 +112,21 @@ const DeckTitle = styled.h3`
   text-align: center;
   margin-bottom: 15px;
   color: var(--text-secondary);
+`;
+
+const ExtremeLabel = styled.div`
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  max-width: 140px;
+  text-align: center;
+  white-space: normal;
+  line-height: 1.2;
+  min-height: 3em; 
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 `;
 
 const DeckContainerWrapper = ({ children, id }) => {
@@ -226,6 +242,8 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
   // Helper to get active card data for Overlay
   const activeCard = items.find(i => i.id === parseInt(activeId));
 
+  const { t } = useTranslation();
+
   // Render Logic
   const renderColumns = () => {
     const scores = Object.keys(distribution).map(Number).sort((a, b) => a - b);
@@ -234,6 +252,9 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
       const count = distribution[score];
       return (
         <Column key={score}>
+          <ExtremeLabel>
+            {score === -4 ? t('sort.stronglyDisagree') : (score === 4 ? t('sort.stronglyAgree') : '')}
+          </ExtremeLabel>
           <ColumnHeader $score={score}>{score > 0 ? `+${score}` : info_score(score)}</ColumnHeader>
           {Array.from({ length: count }).map((_, idx) => {
             const slotId = `slot-${score}-${idx}`;
