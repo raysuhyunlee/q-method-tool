@@ -154,7 +154,7 @@ const AdminPage = () => {
     }
 
     try {
-      const response = await fetch(`/api/delete-result/${id}`, {
+      const response = await fetch(`/api/delete-result?id=${id}`, {
         method: 'DELETE',
       });
       const json = await response.json();
