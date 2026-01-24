@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DndContext, DragOverlay, closestCenter, useSensor, useSensors, PointerSensor, TouchSensor, useDroppable } from '@dnd-kit/core';
+import { DndContext, DragOverlay, closestCenter, pointerWithin, useSensor, useSensors, PointerSensor, TouchSensor, useDroppable } from '@dnd-kit/core';
 import styled from 'styled-components';
 import DraggableCard from './DraggableCard';
 import DropZone from './DropZone';
@@ -290,7 +290,7 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={pointerWithin}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >

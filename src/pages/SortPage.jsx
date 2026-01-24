@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 const PageContainer = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 80px 20px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
