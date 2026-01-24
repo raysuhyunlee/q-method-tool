@@ -56,7 +56,7 @@ const SortPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { lang } = useParams();
-  const { saveResults, userData } = useUser();
+  const { saveResults } = useUser();
 
   const [statements, setStatements] = useState([]);
   const [distribution, setDistribution] = useState({});

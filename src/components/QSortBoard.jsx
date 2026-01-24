@@ -37,13 +37,62 @@ const ColumnHeader = styled.div`
 const DeckContainer = styled.div`
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  padding: 20px;
+  padding: 24px;
   min-height: 200px;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+const CategoryGroup = styled.div`
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 20px;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const CategoryTitle = styled.h3`
+  color: var(--accent-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding-top: 10px;
+`;
+
+const CardsList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+  
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+  &:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+  }
 `;
 
 const DeckTitle = styled.h3`
@@ -195,8 +244,22 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
         {/* Deck as a Droppable area allows returning strings */}
         <DeckContainerWrapper id="deck">
           <DeckTitle>Remaining Statements ({remainingItems.length})</DeckTitle>
-          {remainingItems.map(item => (
-            <DraggableCard key={item.id} id={item.id} text={item.text} />
+
+          {/* Group remaining items by category */}
+          {Object.entries(remainingItems.reduce((acc, item) => {
+            const cat = item.category || 'Other';
+            if (!acc[cat]) acc[cat] = [];
+            acc[cat].push(item);
+            return acc;
+          }, {})).map(([category, items]) => (
+            <CategoryGroup key={category}>
+              <CategoryTitle>{category}</CategoryTitle>
+              <CardsList>
+                {items.map(item => (
+                  <DraggableCard key={item.id} id={item.id} text={item.text} />
+                ))}
+              </CardsList>
+            </CategoryGroup>
           ))}
         </DeckContainerWrapper>
       </BoardContainer>

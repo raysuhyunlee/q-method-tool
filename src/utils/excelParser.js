@@ -12,34 +12,46 @@ export const parseExcel = async (url) => {
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-    // Assuming first row is header, and remaining rows have statements
-    // We expect a format like: [ID, Statement] or just list of statements.
-    // For now, let's treat every non-empty row as a statement.
-    // We'll normalize to { id: number, text: string }
+    // We expect headers: Category, No., Statement, Sentiment (optional)
+    // Row structure: [Category, No, Statement, ...]
+
+    let lastCategory = '';
 
     const statements = jsonData
-      .filter(row => row && row.length > 0)
       .slice(1) // Skip header
       .map((row, index) => {
-        // If row has multiple columns, assume col 0 is ID, col 1 is Text.
-        // If row has 1 column, it is Text.
-        let text = '';
-        let id = index + 1;
+        // Row might be shorter than headers if cells are empty
+        // We need to handle index access carefully
+        const categoryCell = row[0];
+        const noCell = row[1];
+        const statementCell = row[2];
 
-        if (row.length >= 2) {
-          // Check if col 0 looks like an ID
-          if (!isNaN(parseInt(row[0]))) {
-            id = parseInt(row[0]);
-            text = row[1];
-          } else {
-            text = row[0]; // Fallback
-          }
-        } else {
-          text = row[0];
+
+        // Forward fill category
+        if (categoryCell) {
+          lastCategory = categoryCell.trim();
         }
 
-        return { id, text };
-      });
+        let id = index + 1;
+        if (noCell && !isNaN(parseInt(noCell))) {
+          id = parseInt(noCell);
+        }
+
+        let text = statementCell || '';
+        // Fallback if structure is different (e.g. user uploaded old format)
+        if (!text && row.length > 0) {
+          // Try to find text in other columns if expected column is empty 
+          // but this is risky. Let's stick to the plan.
+          // If the file is strictly following the template, keeping it simple is better.
+        }
+
+        return {
+          id,
+          text,
+          category: lastCategory
+        };
+      })
+      .filter(item => item.text); // Filter out empty rows if any
 
     return statements || [];
   } catch (error) {
