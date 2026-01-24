@@ -26,7 +26,8 @@
   },
   "finish": {
     "title": "감사합니다!",
-    "download_button": "데이터 다운로드",
+    "description": "응답이 기록되었습니다.",
+    "save_button": "결과 저장",
     "restart_button": "다시 시작"
   }
 }

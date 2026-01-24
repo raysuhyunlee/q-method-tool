@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
-import { exportData } from '../utils/dataExporter';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -44,6 +43,8 @@ const Button = styled.button`
   border: ${props => props.$primary ? 'none' : '1px solid rgba(255,255,255,0.2)'};
   transition: all 0.3s ease;
   box-shadow: ${props => props.$primary ? '0 10px 20px -10px rgba(118, 75, 162, 0.5)' : 'none'};
+  opacity: ${props => props.disabled ? 0.7 : 1};
+  pointer-events: ${props => props.disabled ? 'none' : 'auto'};
 
   &:hover {
     transform: translateY(-3px);
@@ -56,20 +57,53 @@ const Button = styled.button`
   }
 `;
 
+const Message = styled.p`
+  font-size: 1.1rem;
+  margin-top: 20px;
+  color: ${props => props.$error ? '#ff6b6b' : '#4cd137'};
+  min-height: 27px;
+`;
+
 const SummaryPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { lang } = useParams();
   const { userData, qSortResults } = useUser();
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null); // 'success', 'error', or null
 
-  const handleDownload = () => {
-    exportData(userData, qSortResults);
+  const handleSave = async () => {
+    setIsSaving(true);
+    setSaveStatus(null);
+    try {
+      const response = await fetch('/api/save-result', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userData,
+          qSortResults,
+          locale: lang
+        }),
+      });
+
+      if (response.ok) {
+        setSaveStatus('success');
+      } else {
+        throw new Error('Failed to save');
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      setSaveStatus('error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleRestart = () => {
-    // Ideally clear context, but simplified restart loop:
     navigate(`/${lang}/`);
-    window.location.reload(); // Hard reset to clear state
+    window.location.reload();
   };
 
   return (
@@ -79,9 +113,21 @@ const SummaryPage = () => {
         {t('finish.description') || "Your data is ready."}
       </p>
 
+      {saveStatus && (
+        <Message $error={saveStatus === 'error'}>
+          {saveStatus === 'success'
+            ? "Data saved successfully!"
+            : "Failed to save data. Please try again."}
+        </Message>
+      )}
+
       <ButtonGroup>
-        <Button $primary onClick={handleDownload}>
-          {t('finish.download_button')}
+        <Button
+          $primary
+          onClick={handleSave}
+          disabled={isSaving || saveStatus === 'success'}
+        >
+          {isSaving ? "Saving..." : (t('finish.save_button') || "Save Results")}
         </Button>
         <Button onClick={handleRestart}>
           {t('finish.restart_button')}
