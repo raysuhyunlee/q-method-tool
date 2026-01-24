@@ -30,7 +30,18 @@ export const UserProvider = ({ children }) => {
     });
   };
 
-  const saveResults = (results) => {
+  const saveResults = (placements) => {
+    // Transform placements from { "slot-score-index": cardId } to { cardId: score }
+    const results = {};
+    Object.keys(placements).forEach(slotId => {
+      const cardId = placements[slotId];
+      // Extract score from slotId (format: "slot-score-index")
+      const match = slotId.match(/^slot-(-?\d+)-\d+$/);
+      if (match) {
+        const score = parseInt(match[1]);
+        results[cardId] = score;
+      }
+    });
     setQSortResults(results);
     // You might want to persist partial results too
   };

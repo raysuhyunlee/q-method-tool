@@ -129,6 +129,14 @@ const AdminPage = () => {
   const exportToExcel = () => {
     if (data.length === 0) return;
 
+    // Get all unique statement IDs from all results
+    const allStatementIds = new Set();
+    data.forEach(row => {
+      const results = typeof row.results === 'string' ? JSON.parse(row.results) : row.results;
+      Object.keys(results).forEach(id => allStatementIds.add(parseInt(id)));
+    });
+    const sortedIds = Array.from(allStatementIds).sort((a, b) => a - b);
+
     // Prepare data for Excel
     const excelData = data.map(row => {
       const results = typeof row.results === 'string' ? JSON.parse(row.results) : row.results;
@@ -144,10 +152,10 @@ const AdminPage = () => {
         'Created At': new Date(row.created_at).toLocaleString()
       };
 
-      // Add all statement scores (Q1-Q36)
-      for (let i = 1; i <= 36; i++) {
-        excelRow[`Q${i}`] = results[i.toString()] ?? '';
-      }
+      // Add all statement scores dynamically
+      sortedIds.forEach(statementId => {
+        excelRow[`Q${statementId}`] = results[statementId.toString()] ?? '';
+      });
 
       return excelRow;
     });
