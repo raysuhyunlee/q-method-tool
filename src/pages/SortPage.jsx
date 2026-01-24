@@ -67,13 +67,13 @@ const SortPage = () => {
   useEffect(() => {
     const init = async () => {
       // In production/dev, file is at root of public
-      const data = await parseExcel('/Q-Method_Statement.xlsx');
+      const data = await parseExcel('/Q-Method_Statement.xlsx', lang);
       setStatements(data);
       setDistribution(generateDistribution(data.length));
       setLoading(false);
     };
     init();
-  }, []);
+  }, [lang]);
 
   const handleComplete = (placements, complete) => {
     setCurrentPlacements(placements);

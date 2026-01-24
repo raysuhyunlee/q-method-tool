@@ -1,14 +1,21 @@
 import * as XLSX from 'xlsx';
 
-export const parseExcel = async (url) => {
+export const parseExcel = async (url, lang = 'ko') => {
   try {
     const response = await fetch(url);
     const arrayBuffer = await response.arrayBuffer();
     const data = new Uint8Array(arrayBuffer);
     const workbook = XLSX.read(data, { type: 'array' });
 
-    // Assuming first sheet contains statements
-    const sheetName = workbook.SheetNames[0];
+    // Select sheet based on language
+    const targetSheetName = lang === 'en' ? '영어' : '한국어';
+    let sheetName = workbook.SheetNames.find(name => name === targetSheetName);
+
+    // Fallback if target sheet doesn't exist
+    if (!sheetName) {
+      sheetName = workbook.SheetNames[0];
+    }
+
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 

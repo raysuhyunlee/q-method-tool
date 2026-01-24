@@ -9,7 +9,7 @@ const BoardContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 20px;
+  gap: 40px;
 `;
 
 const ScaledWrapper = styled.div`
@@ -17,8 +17,7 @@ const ScaledWrapper = styled.div`
   overflow: hidden;
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
-  height: ${props => props.$height ? `${props.$height}px` : 'auto'};
+  margin-bottom: 20px;
 `;
 
 const PyramidContent = styled.div`
@@ -27,7 +26,7 @@ const PyramidContent = styled.div`
   justify-content: center;
   gap: 10px;
   padding: 20px;
-  min-height: 300px;
+  min-height: 400px;
   /* Ensure it takes natural width */
   width: max-content;
   transform-origin: top center;
@@ -142,7 +141,6 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
 
   // Scaling state
   const [scale, setScale] = useState(1);
-  const [scaledHeight, setScaledHeight] = useState(null);
   const wrapperRef = useRef(null);
   const contentRef = useRef(null);
 
@@ -162,10 +160,6 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
         // If content is larger, scale < 1.
         const newScale = wrapperWidth < contentWidth ? (wrapperWidth / contentWidth) : 1;
         setScale(newScale);
-
-        // Update scaled height
-        const contentHeight = contentRef.current.offsetHeight;
-        setScaledHeight(contentHeight * newScale);
       }
     };
 
@@ -301,7 +295,7 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
       onDragEnd={handleDragEnd}
     >
       <BoardContainer>
-        <ScaledWrapper ref={wrapperRef} $height={scaledHeight}>
+        <ScaledWrapper ref={wrapperRef}>
           <PyramidContent ref={contentRef} style={{ transform: `scale(${scale})` }}>
             {renderColumns()}
           </PyramidContent>
