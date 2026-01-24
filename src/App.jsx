@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import LandingPage from './pages/LandingPage';
 import SortPage from './pages/SortPage';
 import SummaryPage from './pages/SummaryPage';
+import AdminPage from './pages/AdminPage';
 import LanguageSelector from './components/LanguageSelector';
 import './App.css';
 import './i18n';
@@ -39,6 +40,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/ko" replace />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/:lang" element={<LanguageWrapper />}>
             <Route index element={<LandingPage />} />
             <Route path="sort" element={<SortPage />} />
