@@ -41,7 +41,7 @@ const DropZone = ({ id, currentCard, score }) => {
       {/* Optional: Show score label only on top row or handle externally */}
       <Zone ref={setNodeRef} $isOver={isOver} $hasCard={!!currentCard}>
         {currentCard ? (
-          <DraggableCard id={currentCard.id} text={currentCard.text} />
+          <DraggableCard id={currentCard.id} text={currentCard.text} hideId={true} />
         ) : null}
       </Zone>
     </div>

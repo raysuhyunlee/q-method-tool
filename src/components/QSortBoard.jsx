@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { DndContext, DragOverlay, closestCenter, useSensor, useSensors, PointerSensor, TouchSensor } from '@dnd-kit/core';
+import React, { useState, useEffect, useRef } from 'react';
+import { DndContext, DragOverlay, closestCenter, useSensor, useSensors, PointerSensor, TouchSensor, useDroppable } from '@dnd-kit/core';
 import styled from 'styled-components';
 import DraggableCard from './DraggableCard';
 import DropZone from './DropZone';
@@ -11,14 +11,25 @@ const BoardContainer = styled.div`
   gap: 40px;
 `;
 
-const PyramidContainer = styled.div`
+const ScaledWrapper = styled.div`
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
+
+const PyramidContent = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 10px;
-  overflow-x: auto;
   padding: 20px;
   min-height: 400px;
+  /* Ensure it takes natural width */
+  width: max-content;
+  transform-origin: top center;
+  transition: transform 0.2s ease-out;
 `;
 
 const Column = styled.div`
@@ -102,14 +113,50 @@ const DeckTitle = styled.h3`
   color: var(--text-secondary);
 `;
 
+const DeckContainerWrapper = ({ children, id }) => {
+  const { setNodeRef } = useDroppable({ id });
+  return <DeckContainer ref={setNodeRef}>{children}</DeckContainer>;
+}
+
 const QSortBoard = ({ statements, distribution, onComplete }) => {
   const [items, setItems] = useState([]); // All statements
   const [placements, setPlacements] = useState({}); // { 'score-index': cardId }
   const [activeId, setActiveId] = useState(null);
 
+  // Scaling state
+  const [scale, setScale] = useState(1);
+  const wrapperRef = useRef(null);
+  const contentRef = useRef(null);
+
   useEffect(() => {
     setItems(statements);
   }, [statements]);
+
+  // Scaling effect
+  useEffect(() => {
+    const handleResize = () => {
+      if (wrapperRef.current && contentRef.current) {
+        const wrapperWidth = wrapperRef.current.offsetWidth;
+        const contentWidth = contentRef.current.scrollWidth;
+
+        // Add some padding/margin safety check (e.g. if contentWidth is significantly larger)
+        // If content fits (wrapper > content), scale is 1.
+        // If content is larger, scale < 1.
+        const newScale = wrapperWidth < contentWidth ? (wrapperWidth / contentWidth) : 1;
+        setScale(newScale);
+      }
+    };
+
+    // Initial calc
+    // We might need a small delay to let layout settle or use ResizeObserver
+    const timeout = setTimeout(handleResize, 100);
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeout);
+    };
+  }, [items, distribution]); // Re-run if data changes might change width
 
   // Sensors
   const sensors = useSensors(
@@ -128,12 +175,6 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
     const cardId = active.id.replace('card-', '');
 
     if (!over) {
-      // Dropped outside -> return to deck?
-      // Actually, if it was in a slot, remove it.
-      // But dnd-kit doesn't auto-revert unless we handle it.
-      // Let's implement: if dropped on deck, remove from placements.
-
-      // Currently: if invalid, do nothing (snap back handled by dnd-kit visual, but state remains)
       return;
     }
 
@@ -152,10 +193,6 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
 
     // Dropped on a Slot
     const slotId = over.id; // e.g., 'slot- -4-0'
-
-    // Check if slot is occupied (unless swapping is implemented, let's keep it simple: overwrite or reject?)
-    // Requirement says 1 statement per cell.
-    // If we drop on an occupied slot, we could swap.
 
     setPlacements(prev => {
       const next = { ...prev };
@@ -237,9 +274,11 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
       onDragEnd={handleDragEnd}
     >
       <BoardContainer>
-        <PyramidContainer>
-          {renderColumns()}
-        </PyramidContainer>
+        <ScaledWrapper ref={wrapperRef}>
+          <PyramidContent ref={contentRef} style={{ transform: `scale(${scale})` }}>
+            {renderColumns()}
+          </PyramidContent>
+        </ScaledWrapper>
 
         {/* Deck as a Droppable area allows returning strings */}
         <DeckContainerWrapper id="deck">
@@ -270,12 +309,5 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
     </DndContext>
   );
 };
-
-// Wrapper for Deck to be droppable
-import { useDroppable } from '@dnd-kit/core';
-const DeckContainerWrapper = ({ children, id }) => {
-  const { setNodeRef } = useDroppable({ id });
-  return <DeckContainer ref={setNodeRef}>{children}</DeckContainer>;
-}
 
 export default QSortBoard;

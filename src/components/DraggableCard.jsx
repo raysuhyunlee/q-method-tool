@@ -15,7 +15,7 @@ const Card = styled.div`
   user-select: none;
   min-height: auto;
   display: grid;
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: ${props => props.$hideId ? '1fr' : '40px 1fr'};
   align-items: center;
   text-align: left;
   border: 1px solid #e2e8f0;
@@ -39,10 +39,18 @@ const IdBadge = styled.div`
 `;
 
 const StatementText = styled.div`
-  line-height: 1.4;
+  line-height: 1.3;
+  width: 100%;
+  
+  /* Truncation logic */
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Show max 4 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
-const DraggableCard = ({ id, text }) => {
+const DraggableCard = ({ id, text, hideId = false }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `card-${id}`,
     data: { id, text }
@@ -57,10 +65,11 @@ const DraggableCard = ({ id, text }) => {
       ref={setNodeRef}
       style={style}
       $isDragging={isDragging}
+      $hideId={hideId}
       {...listeners}
       {...attributes}
     >
-      <IdBadge>{id}</IdBadge>
+      {!hideId && <IdBadge>{id}</IdBadge>}
       <StatementText>{text}</StatementText>
     </Card>
   );
