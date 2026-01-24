@@ -9,9 +9,9 @@
     "gender_female": "Female",
     "gender_other": "Other",
     "kpop_preference": "K-pop Preference",
-    "kpop_high": "High",
-    "kpop_medium": "Medium",
-    "kpop_low": "Low",
+    "kpop_high": "Very Interested",
+    "kpop_medium": "Moderately Interested",
+    "kpop_low": "Not Familiar",
     "start_button": "Start Q-Sort"
   },
   "sort": {

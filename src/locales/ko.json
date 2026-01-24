@@ -9,9 +9,9 @@
     "gender_female": "여성",
     "gender_other": "기타",
     "kpop_preference": "K-pop 선호도",
-    "kpop_high": "상",
-    "kpop_medium": "중",
-    "kpop_low": "하",
+    "kpop_high": "매우 관심 있음",
+    "kpop_medium": "적당히 관심 있음",
+    "kpop_low": "잘 모름",
     "start_button": "Q-Sort 시작하기"
   },
   "sort": {
