@@ -99,6 +99,28 @@ const ErrorMessage = styled.div`
   font-size: 1.1rem;
 `;
 
+const DeleteButton = styled.button`
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  color: white;
+  border: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
 const AdminPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -123,6 +145,29 @@ const AdminPage = () => {
       setError('Error loading data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteRecord = async (id) => {
+    if (!confirm('Are you sure you want to delete this record?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/delete-result/${id}`, {
+        method: 'DELETE',
+      });
+      const json = await response.json();
+
+      if (json.success) {
+        // Refresh the data
+        await fetchResults();
+      } else {
+        alert('Failed to delete record');
+      }
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('Error deleting record');
     }
   };
 
@@ -207,6 +252,7 @@ const AdminPage = () => {
               {sortedStatementIds.map(id => (
                 <Th key={id}>Q{id}</Th>
               ))}
+              <Th>Actions</Th>
             </tr>
           </thead>
           <tbody>
@@ -224,6 +270,11 @@ const AdminPage = () => {
                   {sortedStatementIds.map(id => (
                     <Td key={id}>{results[id.toString()] ?? ''}</Td>
                   ))}
+                  <Td>
+                    <DeleteButton onClick={() => deleteRecord(row.id)}>
+                      Delete
+                    </DeleteButton>
+                  </Td>
                 </Tr>
               );
             })}
