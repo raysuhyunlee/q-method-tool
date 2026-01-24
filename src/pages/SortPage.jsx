@@ -56,7 +56,7 @@ const SortPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { lang } = useParams();
-  const { saveResults } = useUser();
+  const { prepResults } = useUser();
 
   const [statements, setStatements] = useState([]);
   const [distribution, setDistribution] = useState({});
@@ -82,7 +82,7 @@ const SortPage = () => {
 
   const onFinish = () => {
     if (!isComplete) return;
-    saveResults(currentPlacements);
+    prepResults(currentPlacements);
     navigate(`/${lang}/finish`);
   };
 

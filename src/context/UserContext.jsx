@@ -13,6 +13,8 @@ export const UserProvider = ({ children }) => {
   });
 
   const [qSortResults, setQSortResults] = useState({});
+  const [saveStatus, setSaveStatus] = useState('idle'); // 'idle', 'saving', 'success', 'error'
+  const [stagedPlacements, setStagedPlacements] = useState(null);
 
   // Load from localStorage on mount (optional, helps with refresh)
   useEffect(() => {
@@ -30,11 +32,19 @@ export const UserProvider = ({ children }) => {
     });
   };
 
-  const saveResults = (placements) => {
+  const prepResults = (placements) => {
+    setStagedPlacements(placements);
+    setSaveStatus('idle'); // Reset status for new submission
+  };
+
+  const saveResults = async (locale) => {
+    if (!stagedPlacements) return false;
+
+    setSaveStatus('saving');
     // Transform placements from { "slot-score-index": cardId } to { cardId: score }
     const results = {};
-    Object.keys(placements).forEach(slotId => {
-      const cardId = placements[slotId];
+    Object.keys(stagedPlacements).forEach(slotId => {
+      const cardId = stagedPlacements[slotId];
       // Extract score from slotId (format: "slot-score-index")
       const match = slotId.match(/^slot-(-?\d+)-\d+$/);
       if (match) {
@@ -42,12 +52,36 @@ export const UserProvider = ({ children }) => {
         results[cardId] = score;
       }
     });
-    setQSortResults(results);
-    // You might want to persist partial results too
+
+    try {
+      const response = await fetch('/api/save-result', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userData,
+          qSortResults: results,
+          locale: locale
+        }),
+      });
+
+      if (response.ok) {
+        setQSortResults(results);
+        setSaveStatus('success');
+        return true;
+      } else {
+        throw new Error('Failed to save');
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      setSaveStatus('error');
+      return false;
+    }
   };
 
   return (
-    <UserContext.Provider value={{ userData, updateUser, qSortResults, saveResults }}>
+    <UserContext.Provider value={{ userData, updateUser, qSortResults, saveResults, saveStatus, prepResults }}>
       {children}
     </UserContext.Provider>
   );

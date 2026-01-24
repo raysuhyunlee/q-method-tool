@@ -68,68 +68,58 @@ const SummaryPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { lang } = useParams();
-  const { userData, qSortResults } = useUser();
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState(null); // 'success', 'error', or null
+  const { saveResults, saveStatus } = useUser();
 
-  const handleSave = async () => {
-    setIsSaving(true);
-    setSaveStatus(null);
-    try {
-      const response = await fetch('/api/save-result', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userData,
-          qSortResults,
-          locale: lang
-        }),
-      });
-
-      if (response.ok) {
-        setSaveStatus('success');
-      } else {
-        throw new Error('Failed to save');
-      }
-    } catch (error) {
-      console.error('Save error:', error);
-      setSaveStatus('error');
-    } finally {
-      setIsSaving(false);
+  useEffect(() => {
+    // Automatically trigger save when page loads
+    if (saveStatus === 'idle') {
+      saveResults(lang);
     }
-  };
+  }, [lang, saveResults, saveStatus]);
 
   const handleRestart = () => {
     navigate(`/${lang}/`);
     window.location.reload();
   };
 
+  const handleRetry = () => {
+    saveResults(lang);
+  };
+
   return (
     <Container>
       <Title>{t('finish.title')}</Title>
-      <p style={{ fontSize: '1.2rem', color: '#94a3b8' }}>
-        {t('finish.description') || "Your data is ready."}
-      </p>
 
-      {saveStatus && (
-        <Message $error={saveStatus === 'error'}>
-          {saveStatus === 'success'
-            ? "Data saved successfully!"
-            : "Failed to save data. Please try again."}
-        </Message>
+      {saveStatus === 'saving' && (
+        <p style={{ fontSize: '1.2rem', color: 'var(--accent-color)' }}>
+          {t('sort.saving') || "Saving your data..."}
+        </p>
+      )}
+
+      {saveStatus === 'error' && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          <Message $error>
+            {t('sort.save_failed') || "Failed to save data. Please try again."}
+          </Message>
+          <Button $primary onClick={handleRetry}>
+            {t('sort.retry_button') || "Retry Save"}
+          </Button>
+        </div>
+      )}
+
+      {saveStatus === 'success' && (
+        <>
+          <p style={{ fontSize: '1.2rem', color: '#94a3b8' }}>
+            {t('finish.description') || "Your data has been saved successfully."}
+          </p>
+          <Message>
+            {t('finish.save_success_message') || "Thank you for your participation!"}
+          </Message>
+        </>
       )}
 
       <ButtonGroup>
-        <Button
-          $primary
-          onClick={handleSave}
-          disabled={isSaving || saveStatus === 'success'}
-        >
-          {isSaving ? "Saving..." : (t('finish.save_button') || "Save Results")}
-        </Button>
-        <Button onClick={handleRestart}>
+        <Button onClick={handleRestart} $primary={saveStatus === 'success'}>
           {t('finish.restart_button')}
         </Button>
       </ButtonGroup>
