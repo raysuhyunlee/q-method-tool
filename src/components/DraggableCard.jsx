@@ -66,6 +66,7 @@ const DraggableCard = ({ id, text, hideId = false }) => {
       style={style}
       $isDragging={isDragging}
       $hideId={hideId}
+      title={text}
       {...listeners}
       {...attributes}
     >
