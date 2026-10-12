@@ -43,7 +43,7 @@ const Segment = styled.button`
   padding: var(--space-2) var(--space-3);
   border: none;
   border-radius: var(--radius-sm);
-  background: ${({ $active }) => ($active ? 'var(--surface)' : 'transparent')};
+  background: ${({ $active }) => ($active ? 'var(--border-strong)' : 'transparent')};
   box-shadow: ${({ $active }) => ($active ? 'var(--shadow-sm)' : 'none')};
   color: ${({ $active }) => ($active ? 'var(--text)' : 'var(--text-muted)')};
   font-size: var(--font-sm);

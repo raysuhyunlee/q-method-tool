@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation, useMatch, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ExperimentIndex from './pages/ExperimentIndex';
 import LandingPage from './pages/LandingPage';
@@ -44,6 +44,8 @@ const LanguageLayout = () => {
   const { i18n } = useTranslation();
   const experiment = getExperiment(experimentId);
   const supported = experiment.languages.includes(lang);
+  // The sort page places the selector in its own header.
+  const onSortPage = useMatch('/:experimentId/:lang/sort');
 
   useEffect(() => {
     if (supported && i18n.language !== lang) i18n.changeLanguage(lang);
@@ -53,7 +55,7 @@ const LanguageLayout = () => {
 
   return (
     <div className="app-container">
-      {experiment.languages.length > 1 && <LanguageSelector languages={experiment.languages} />}
+      {experiment.languages.length > 1 && !onSortPage && <LanguageSelector languages={experiment.languages} />}
       <Outlet context={experiment} />
     </div>
   );

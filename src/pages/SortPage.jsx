@@ -4,30 +4,28 @@ import { Navigate, useNavigate, useOutletContext, useParams } from 'react-router
 import styled from 'styled-components';
 import { useSession } from '../context/SessionContext';
 import QSortBoard from '../components/QSortBoard';
+import LanguageSelector from '../components/LanguageSelector';
 import { Alert, Button, TextButton } from '../components/ui';
 import { getStatements } from '../experiments';
 
 const PageContainer = styled.div`
   width: 100%;
-  max-width: 1440px;
-  padding: var(--space-7) var(--space-4) var(--space-6);
+  height: 100vh;
+  height: 100dvh;
+  padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--space-4);
+  overflow: hidden;
 `;
 
 const Header = styled.div`
-  position: sticky;
-  top: 0;
-  z-index: 5;
+  flex: none;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: var(--space-3) var(--space-5);
-  padding: var(--space-3) 0;
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(8px);
 `;
 
 const Instruction = styled.p`
@@ -82,6 +80,7 @@ const SortPage = () => {
       <Header>
         <Instruction>{t('sort.instruction')}</Instruction>
         <Actions>
+          {experiment.languages.length > 1 && <LanguageSelector languages={experiment.languages} inline />}
           <Progress aria-label={`${placedCount} / ${statements.length}`}>
             {placedCount} / {statements.length}
           </Progress>

@@ -8,14 +8,21 @@ import { SCORES } from '../experiments';
 import { slotId } from '../utils/placements';
 
 const BoardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: var(--space-6);
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--space-4);
+
+  @media (max-width: 768px) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
 `;
 
 const ScaledWrapper = styled.div`
-  width: 100%;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   justify-content: center;
   overflow: hidden;
@@ -55,25 +62,32 @@ const ColumnHeader = styled.div`
   color: ${({ $score }) => ($score < 0 ? 'var(--disagree)' : $score > 0 ? 'var(--agree)' : 'var(--text-muted)')};
 `;
 
-const Deck = styled.div`
-  width: 100%;
-  padding: var(--space-5);
+const Deck = styled.aside`
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid ${({ $isOver }) => ($isOver ? 'var(--accent)' : 'var(--border)')};
   border-radius: var(--radius-lg);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-  min-height: 120px;
-
-  @media (max-width: 480px) {
-    padding: var(--space-4);
-  }
+  overflow: hidden;
 `;
 
 const DeckTitle = styled.h2`
+  flex: none;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
   font-size: var(--font-md);
   font-weight: 700;
+`;
+
+const DeckList = styled.div`
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 `;
 
 const Count = styled.span`
@@ -94,9 +108,9 @@ const CategoryTitle = styled.h3`
   color: var(--text-muted);
 `;
 
-const CardsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+const CardsList = styled.div`
+  display: flex;
+  flex-direction: column;
   gap: var(--space-2);
 `;
 
@@ -105,7 +119,10 @@ const DeckDropArea = ({ children }) => {
   return <Deck ref={setNodeRef} $isOver={isOver}>{children}</Deck>;
 };
 
-// Scales the pyramid down to fit the viewport width and keeps the wrapper height in sync.
+const NARROW_QUERY = '(max-width: 768px)';
+
+// Scales the pyramid down so it fits its area without scrolling. On narrow screens the
+// pyramid sits above the deck, so it fits the width and gives the remaining height to the deck.
 const useFitScale = () => {
   const wrapperRef = useRef(null);
   const contentRef = useRef(null);
@@ -116,15 +133,25 @@ const useFitScale = () => {
     const content = contentRef.current;
     if (!wrapper || !content) return undefined;
 
+    const narrow = window.matchMedia(NARROW_QUERY);
     const measure = () => {
-      const scale = Math.min(1, wrapper.clientWidth / content.offsetWidth);
-      setFit({ scale, height: content.offsetHeight * scale });
+      const byWidth = wrapper.clientWidth / content.offsetWidth;
+      if (narrow.matches) {
+        const scale = Math.min(1, byWidth);
+        setFit({ scale, height: content.offsetHeight * scale });
+      } else {
+        setFit({ scale: Math.min(1, byWidth, wrapper.clientHeight / content.offsetHeight), height: undefined });
+      }
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(wrapper);
     observer.observe(content);
-    return () => observer.disconnect();
+    narrow.addEventListener('change', measure);
+    return () => {
+      observer.disconnect();
+      narrow.removeEventListener('change', measure);
+    };
   }, []);
 
   return { wrapperRef, contentRef, ...fit };
@@ -213,21 +240,23 @@ const QSortBoard = ({ statements, distribution, placements, onChange }) => {
             {t('sort.remaining_statements')}
             <Count>{remainingCount}</Count>
           </DeckTitle>
-          {remainingByCategory.map(([category, items]) => (
-            <CategoryGroup key={category}>
-              {category && <CategoryTitle>{category}</CategoryTitle>}
-              <CardsGrid>
-                {items.map((item) => (
-                  <DraggableCard key={item.id} id={item.id} text={item.text} />
-                ))}
-              </CardsGrid>
-            </CategoryGroup>
-          ))}
+          <DeckList>
+            {remainingByCategory.map(([category, items]) => (
+              <CategoryGroup key={category}>
+                {category && <CategoryTitle>{category}</CategoryTitle>}
+                <CardsList>
+                  {items.map((item) => (
+                    <DraggableCard key={item.id} id={item.id} text={item.text} />
+                  ))}
+                </CardsList>
+              </CategoryGroup>
+            ))}
+          </DeckList>
         </DeckDropArea>
       </BoardContainer>
 
       <DragOverlay className="drag-overlay" dropAnimation={null}>
-        {activeCard && <CardView id={activeCard.id} text={activeCard.text} overlay style={{ width: 260 }} />}
+        {activeCard && <CardView id={activeCard.id} text={activeCard.text} overlay style={{ width: 288 }} />}
       </DragOverlay>
     </DndContext>
   );
