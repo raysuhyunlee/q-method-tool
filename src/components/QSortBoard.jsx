@@ -45,18 +45,20 @@ const Column = styled.div`
 
 const ExtremeLabel = styled.div`
   width: ${SLOT_WIDTH}px;
-  min-height: 2.8em;
+  min-height: 2.6em;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   text-align: center;
-  font-size: var(--font-sm);
+  font-size: calc(var(--font-sm) * 2);
   font-weight: 600;
   line-height: 1.3;
   color: ${({ $score }) => ($score < 0 ? 'var(--disagree)' : 'var(--agree)')};
 `;
 
 const ColumnHeader = styled.div`
+  font-size: calc(var(--font-md) * 2);
+  line-height: 1.2;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: ${({ $score }) => ($score < 0 ? 'var(--disagree)' : $score > 0 ? 'var(--agree)' : 'var(--text-muted)')};

@@ -10,8 +10,8 @@ const Zone = styled.div`
   width: ${SLOT_WIDTH}px;
   height: ${SLOT_HEIGHT}px;
   border-radius: var(--radius-sm);
-  border: 1px dashed ${({ $isOver }) => ($isOver ? 'var(--accent)' : 'var(--border-strong)')};
-  background: ${({ $isOver }) => ($isOver ? 'var(--accent-soft)' : 'var(--surface-muted)')};
+  border: 1px dashed ${({ $isOver }) => ($isOver ? 'var(--accent)' : 'var(--slot-border)')};
+  background: ${({ $isOver }) => ($isOver ? 'var(--accent-soft)' : 'var(--slot)')};
   transition: background 0.15s, border-color 0.15s;
 
   ${({ $hasCard, $isOver }) => $hasCard && `
