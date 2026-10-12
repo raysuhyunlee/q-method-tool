@@ -105,9 +105,16 @@ const CategoryGroup = styled.section`
 `;
 
 const CategoryTitle = styled.h3`
+  position: sticky;
+  top: calc(-1 * var(--space-4));
+  z-index: 1;
+  margin: calc(-1 * var(--space-2)) 0 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
   font-size: var(--font-sm);
-  font-weight: 600;
-  color: var(--text-muted);
+  font-weight: 700;
+  color: var(--accent);
 `;
 
 const CardsList = styled.div`
