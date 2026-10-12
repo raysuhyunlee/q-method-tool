@@ -26,7 +26,8 @@ const Header = styled.div`
   align-items: center;
   gap: var(--space-3) var(--space-5);
   padding: var(--space-3) 0;
-  background: var(--bg);
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
 `;
 
 const Instruction = styled.p`

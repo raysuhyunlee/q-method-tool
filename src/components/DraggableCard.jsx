@@ -8,7 +8,7 @@ const Card = styled.div`
   width: 100%;
   height: ${({ $compact }) => ($compact ? '100%' : 'auto')};
   padding: ${({ $compact }) => ($compact ? 'var(--space-2)' : 'var(--space-3)')};
-  background: var(--surface);
+  background: var(--surface-raised);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   box-shadow: ${({ $overlay }) => ($overlay ? 'var(--shadow-md)' : 'var(--shadow-sm)')};

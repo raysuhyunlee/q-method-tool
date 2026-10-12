@@ -87,15 +87,15 @@ const Td = styled.td`
 
 const Tr = styled.tr`
   &:hover {
-    background: var(--bg);
+    background: var(--surface-muted);
   }
 `;
 
 const StatusBadge = styled.span`
   padding: 2px var(--space-2);
   border-radius: var(--radius-sm);
-  background: ${({ $done }) => ($done ? '#e6f4ea' : 'var(--surface-muted)')};
-  color: ${({ $done }) => ($done ? '#1e7b3c' : 'var(--text-muted)')};
+  background: ${({ $done }) => ($done ? 'var(--success-soft)' : 'var(--surface-muted)')};
+  color: ${({ $done }) => ($done ? 'var(--success)' : 'var(--text-muted)')};
   font-weight: 600;
 `;
 

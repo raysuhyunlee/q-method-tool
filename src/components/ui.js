@@ -6,7 +6,7 @@ export const Button = styled.button`
   border-radius: var(--radius-md);
   border: 1px solid ${({ $variant }) => ($variant === 'secondary' ? 'var(--border-strong)' : 'transparent')};
   background: ${({ $variant }) => ($variant === 'secondary' ? 'var(--surface)' : 'var(--accent)')};
-  color: ${({ $variant }) => ($variant === 'secondary' ? 'var(--text)' : '#fff')};
+  color: ${({ $variant }) => ($variant === 'secondary' ? 'var(--text)' : 'var(--on-accent)')};
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -18,7 +18,7 @@ export const Button = styled.button`
 
   &:disabled {
     background: ${({ $variant }) => ($variant === 'secondary' ? 'var(--surface)' : 'var(--border-strong)')};
-    color: ${({ $variant }) => ($variant === 'secondary' ? 'var(--text-muted)' : '#fff')};
+    color: ${({ $variant }) => ($variant === 'secondary' ? 'var(--text-muted)' : 'var(--text-muted)')};
     cursor: not-allowed;
   }
 `;

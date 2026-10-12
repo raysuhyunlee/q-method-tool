@@ -1,20 +1,26 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
 :root {
-  --bg: #f5f6f8;
-  --surface: #ffffff;
-  --surface-muted: #eef0f3;
-  --border: #dfe3e8;
-  --border-strong: #c3cad3;
-  --text: #1a1d21;
-  --text-muted: #5d6673;
-  --accent: #2f54d6;
-  --accent-hover: #2445b8;
-  --accent-soft: #e8edfc;
-  --disagree: #b5473a;
-  --agree: #2f54d6;
-  --danger: #c73a32;
-  --danger-soft: #fdecea;
+  color-scheme: dark;
+  --bg: #0f172a;
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --surface: #1e293b;
+  --surface-raised: #2a3a52;
+  --surface-muted: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-hover: #7dd3fc;
+  --accent-soft: rgba(56, 189, 248, 0.18);
+  --on-accent: #0f172a;
+  --disagree: #f87171;
+  --agree: #38bdf8;
+  --danger: #f87171;
+  --danger-soft: rgba(239, 68, 68, 0.15);
+  --success: #34d399;
+  --success-soft: rgba(16, 185, 129, 0.15);
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -34,8 +40,8 @@
   --font-xl: 1.5rem;
 
   --control-height: 44px;
-  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
-  --shadow-md: 0 8px 24px rgba(16, 24, 40, 0.12);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -46,7 +52,8 @@
 
 body {
   font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--bg);
+  background: var(--bg-gradient) fixed;
+  background-color: var(--bg);
   color: var(--text);
   font-size: var(--font-md);
   line-height: 1.5;
