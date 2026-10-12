@@ -1,210 +1,149 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useUser } from '../context/UserContext';
+import { useSession } from '../context/SessionContext';
+import { Button, Panel, PageTitle } from '../components/ui';
 
 const Container = styled.div`
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-4);
+`;
+
+const Form = styled(Panel).attrs({ as: 'form' })`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+  gap: var(--space-5);
+  padding: var(--space-6);
+
+  @media (max-width: 480px) {
+    padding: var(--space-5);
+  }
 `;
 
-const Card = styled.div`
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  border: var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  border-radius: 20px;
-  padding: 40px;
-  width: 100%;
-  animation: fadeIn 0.6s ease-out;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 10px;
-  text-align: center;
-`;
-
-const Subtitle = styled.p`
-  color: var(--text-secondary);
-  text-align: center;
-  margin-bottom: 30px;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 20px;
-  width: 100%;
+const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 `;
 
 const Label = styled.label`
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: var(--text-primary);
+  font-size: var(--font-sm);
+  font-weight: 600;
+`;
+
+const controlStyles = `
+  width: 100%;
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  transition: border-color 0.15s;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 1rem;
-  transition: all 0.2s;
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    background: rgba(255, 255, 255, 0.1);
-  }
+  ${controlStyles}
+  border-color: ${({ $invalid }) => ($invalid ? 'var(--danger)' : 'var(--border-strong)')};
 `;
 
 const Select = styled.select`
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.8); /* Darker for dropdown visibility */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 1rem;
-  transition: all 0.2s;
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent-color);
-  }
-`;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
-  color: white;
-  font-weight: 600;
-  font-size: 1.1rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 10px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
+  ${controlStyles}
+  border-color: ${({ $invalid }) => ($invalid ? 'var(--danger)' : 'var(--border-strong)')};
 `;
 
 const ErrorMsg = styled.span`
-  color: var(--error-color);
-  font-size: 0.875rem;
-  margin-top: 4px;
-  display: block;
+  color: var(--danger);
+  font-size: var(--font-sm);
 `;
 
 const LandingPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { lang } = useParams();
-  const { updateUser, userData } = useUser();
-  const [localData, setLocalData] = useState(userData);
+  const { experimentId, lang } = useParams();
+  const experiment = useOutletContext();
+  const { userData, placements, completed, update } = useSession();
+  const [form, setForm] = useState(userData);
   const [errors, setErrors] = useState({});
+
+  if (completed) return <Navigate to={`/${experimentId}/${lang}/finish`} replace />;
+
+  const prefKey = `preference.${experiment.preference}`;
+  const hasProgress = Object.keys(placements).length > 0;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLocalData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const validate = () => {
-    const newErrors = {};
-    if (!localData.name.trim()) newErrors.name = 'Name is required';
-    if (!localData.age || isNaN(localData.age)) newErrors.age = 'Valid age is required';
-    if (!localData.gender) newErrors.gender = 'Gender is required';
-    if (!localData.kpopPreference) newErrors.kpopPreference = 'Preference is required';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const next = {};
+    if (!form.name.trim()) next.name = t('landing.error_name');
+    if (!form.age || isNaN(form.age)) next.age = t('landing.error_age');
+    if (!form.gender) next.gender = t('landing.error_required');
+    if (!form.preference) next.preference = t('landing.error_required');
+    setErrors(next);
+    return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = () => {
-    if (validate()) {
-      updateUser(localData);
-      navigate(`/${lang}/sort`);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    update({ userData: { ...form, name: form.name.trim() } });
+    navigate(`/${experimentId}/${lang}/sort`);
   };
 
   return (
-    <div className="page-container">
-      <Container>
-        <Card>
-          <Title>{t('landing.title')}</Title>
-          <Subtitle>{t('landing.description')}</Subtitle>
+    <Container>
+      <Form onSubmit={handleSubmit} noValidate>
+        <PageTitle>{experiment.title[i18n.language] ?? experiment.title.ko}</PageTitle>
 
-          <FormGroup>
-            <Label>{t('landing.name')}</Label>
-            <Input
-              name="name"
-              value={localData.name}
-              onChange={handleChange}
-              placeholder={t('landing.name')}
-            />
-            {errors.name && <ErrorMsg>{errors.name}</ErrorMsg>}
-          </FormGroup>
+        <Field>
+          <Label htmlFor="name">{t('landing.name')}</Label>
+          <Input id="name" name="name" autoComplete="name" value={form.name} onChange={handleChange} $invalid={!!errors.name} />
+          {errors.name && <ErrorMsg>{errors.name}</ErrorMsg>}
+        </Field>
 
-          <FormGroup>
-            <Label>{t('landing.age')}</Label>
-            <Input
-              name="age"
-              type="number"
-              value={localData.age}
-              onChange={handleChange}
-              placeholder={t('landing.age')}
-            />
-            {errors.age && <ErrorMsg>{errors.age}</ErrorMsg>}
-          </FormGroup>
+        <Field>
+          <Label htmlFor="age">{t('landing.age')}</Label>
+          <Input id="age" name="age" type="number" inputMode="numeric" min="1" value={form.age} onChange={handleChange} $invalid={!!errors.age} />
+          {errors.age && <ErrorMsg>{errors.age}</ErrorMsg>}
+        </Field>
 
-          <FormGroup>
-            <Label>{t('landing.gender')}</Label>
-            <Select name="gender" value={localData.gender} onChange={handleChange}>
-              <option value="">{t('landing.gender')}...</option>
-              <option value="male">{t('landing.gender_male')}</option>
-              <option value="female">{t('landing.gender_female')}</option>
-              <option value="other">{t('landing.gender_other')}</option>
-            </Select>
-            {errors.gender && <ErrorMsg>{errors.gender}</ErrorMsg>}
-          </FormGroup>
+        <Field>
+          <Label htmlFor="gender">{t('landing.gender')}</Label>
+          <Select id="gender" name="gender" value={form.gender} onChange={handleChange} $invalid={!!errors.gender}>
+            <option value="">{t('landing.select')}</option>
+            <option value="male">{t('landing.gender_male')}</option>
+            <option value="female">{t('landing.gender_female')}</option>
+            <option value="other">{t('landing.gender_other')}</option>
+          </Select>
+          {errors.gender && <ErrorMsg>{errors.gender}</ErrorMsg>}
+        </Field>
 
-          <FormGroup>
-            <Label>{t('landing.kpop_preference')}</Label>
-            <Select name="kpopPreference" value={localData.kpopPreference} onChange={handleChange}>
-              <option value="">{t('landing.kpop_preference')}...</option>
-              <option value="high">{t('landing.kpop_high')}</option>
-              <option value="medium">{t('landing.kpop_medium')}</option>
-              <option value="low">{t('landing.kpop_low')}</option>
-            </Select>
-            {errors.kpopPreference && <ErrorMsg>{errors.kpopPreference}</ErrorMsg>}
-          </FormGroup>
+        <Field>
+          <Label htmlFor="preference">{t(`${prefKey}.label`)}</Label>
+          <Select id="preference" name="preference" value={form.preference} onChange={handleChange} $invalid={!!errors.preference}>
+            <option value="">{t('landing.select')}</option>
+            <option value="high">{t(`${prefKey}.high`)}</option>
+            <option value="medium">{t(`${prefKey}.medium`)}</option>
+            <option value="low">{t(`${prefKey}.low`)}</option>
+          </Select>
+          {errors.preference && <ErrorMsg>{errors.preference}</ErrorMsg>}
+        </Field>
 
-          <Button onClick={handleSubmit}>{t('landing.start_button')}</Button>
-        </Card>
-      </Container>
-    </div>
+        <Button type="submit">{t(hasProgress ? 'landing.continue_button' : 'landing.start_button')}</Button>
+      </Form>
+    </Container>
   );
 };
 

@@ -1,292 +1,185 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DndContext, DragOverlay, closestCenter, pointerWithin, useSensor, useSensors, PointerSensor, TouchSensor, useDroppable } from '@dnd-kit/core';
+import { DndContext, DragOverlay, pointerWithin, useSensor, useSensors, PointerSensor, TouchSensor, useDroppable } from '@dnd-kit/core';
 import styled from 'styled-components';
-import DraggableCard from './DraggableCard';
-import DropZone from './DropZone';
+import DraggableCard, { CardView } from './DraggableCard';
+import DropZone, { SLOT_WIDTH } from './DropZone';
+import { SCORES } from '../experiments';
+import { slotId } from '../utils/placements';
 
 const BoardContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 40px;
+  gap: var(--space-6);
 `;
 
 const ScaledWrapper = styled.div`
   width: 100%;
-  height: 800px;
-  overflow: hidden;
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  overflow: hidden;
 `;
 
 const PyramidContent = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 10px;
-  padding: 20px;
-  min-height: 400px;
-  /* Ensure it takes natural width */
+  gap: var(--space-2);
   width: max-content;
+  height: max-content;
   transform-origin: top center;
-  transition: transform 0.2s ease-out;
 `;
 
 const Column = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-`;
-
-const ColumnHeader = styled.div`
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: ${props => props.$score === 0 ? 'var(--accent-color)' : 'var(--text-primary)'};
-`;
-
-const DeckContainer = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 24px;
-  min-height: 200px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-`;
-
-const CategoryGroup = styled.div`
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 20px;
-  
-  &:last-child {
-    border-bottom: none;
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const CategoryTitle = styled.h3`
-  color: var(--accent-color);
-  font-size: 1.1rem;
-  font-weight: 600;
-  padding-top: 10px;
-`;
-
-const CardsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 400px;
-  overflow-y: auto;
-  padding-right: 10px;
-  
-  /* Custom scrollbar */
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 3px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-  }
-  &:hover::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-  }
-`;
-
-const DeckTitle = styled.h3`
-  width: 100%;
-  text-align: center;
-  margin-bottom: 15px;
-  color: var(--text-secondary);
+  gap: var(--space-2);
 `;
 
 const ExtremeLabel = styled.div`
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  max-width: 140px;
-  text-align: center;
-  white-space: normal;
-  line-height: 1.2;
-  min-height: 3em; 
+  width: ${SLOT_WIDTH}px;
+  min-height: 2.8em;
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  text-align: center;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  line-height: 1.3;
+  color: ${({ $score }) => ($score < 0 ? 'var(--disagree)' : 'var(--agree)')};
 `;
 
-const DeckContainerWrapper = ({ children, id }) => {
-  const { setNodeRef } = useDroppable({ id });
-  return <DeckContainer ref={setNodeRef}>{children}</DeckContainer>;
-}
+const ColumnHeader = styled.div`
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: ${({ $score }) => ($score < 0 ? 'var(--disagree)' : $score > 0 ? 'var(--agree)' : 'var(--text-muted)')};
+`;
 
-const QSortBoard = ({ statements, distribution, onComplete }) => {
-  const [items, setItems] = useState([]); // All statements
-  const [placements, setPlacements] = useState({}); // { 'score-index': cardId }
-  const [activeId, setActiveId] = useState(null);
+const Deck = styled.div`
+  width: 100%;
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid ${({ $isOver }) => ($isOver ? 'var(--accent)' : 'var(--border)')};
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-height: 120px;
 
-  // Scaling state
-  const [scale, setScale] = useState(1);
+  @media (max-width: 480px) {
+    padding: var(--space-4);
+  }
+`;
+
+const DeckTitle = styled.h2`
+  font-size: var(--font-md);
+  font-weight: 700;
+`;
+
+const Count = styled.span`
+  margin-left: var(--space-2);
+  color: var(--text-muted);
+  font-weight: 600;
+`;
+
+const CategoryGroup = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+`;
+
+const CategoryTitle = styled.h3`
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+`;
+
+const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-2);
+`;
+
+const DeckDropArea = ({ children }) => {
+  const { setNodeRef, isOver } = useDroppable({ id: 'deck' });
+  return <Deck ref={setNodeRef} $isOver={isOver}>{children}</Deck>;
+};
+
+// Scales the pyramid down to fit the viewport width and keeps the wrapper height in sync.
+const useFitScale = () => {
   const wrapperRef = useRef(null);
   const contentRef = useRef(null);
+  const [fit, setFit] = useState({ scale: 1, height: undefined });
 
-  useEffect(() => {
-    setItems(statements);
-  }, [statements]);
+  useLayoutEffect(() => {
+    const wrapper = wrapperRef.current;
+    const content = contentRef.current;
+    if (!wrapper || !content) return undefined;
 
-  // Scaling effect
-  useEffect(() => {
-    const handleResize = () => {
-      if (wrapperRef.current && contentRef.current) {
-        const wrapperWidth = wrapperRef.current.offsetWidth;
-        const contentWidth = contentRef.current.scrollWidth;
-
-        // Add some padding/margin safety check (e.g. if contentWidth is significantly larger)
-        // If content fits (wrapper > content), scale is 1.
-        // If content is larger, scale < 1.
-        const newScale = wrapperWidth < contentWidth ? (wrapperWidth / contentWidth) : 1;
-        setScale(newScale);
-      }
+    const measure = () => {
+      const scale = Math.min(1, wrapper.clientWidth / content.offsetWidth);
+      setFit({ scale, height: content.offsetHeight * scale });
     };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(wrapper);
+    observer.observe(content);
+    return () => observer.disconnect();
+  }, []);
 
-    // Initial calc
-    // We might need a small delay to let layout settle or use ResizeObserver
-    const timeout = setTimeout(handleResize, 100);
+  return { wrapperRef, contentRef, ...fit };
+};
 
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(timeout);
-    };
-  }, [items, distribution]); // Re-run if data changes might change width
+const QSortBoard = ({ statements, distribution, placements, onChange }) => {
+  const { t } = useTranslation();
+  const [activeId, setActiveId] = useState(null);
+  const { wrapperRef, contentRef, scale, height } = useFitScale();
 
-  // Sensors
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor)
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } })
   );
 
-  const handleDragStart = (event) => {
-    setActiveId(event.active.id.replace('card-', ''));
-  };
+  const statementsById = useMemo(() => new Map(statements.map((s) => [s.id, s])), [statements]);
 
-  const handleDragEnd = (event) => {
-    const { active, over } = event;
+  const remainingByCategory = useMemo(() => {
+    const placed = new Set(Object.values(placements));
+    const groups = new Map();
+    statements.forEach((s) => {
+      if (placed.has(s.id)) return;
+      const key = s.category || '';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(s);
+    });
+    return [...groups.entries()];
+  }, [statements, placements]);
+
+  const remainingCount = statements.length - Object.keys(placements).length;
+
+  const handleDragStart = (event) => setActiveId(event.active.data.current.id);
+
+  const handleDragEnd = ({ active, over }) => {
     setActiveId(null);
+    if (!over) return;
 
-    const cardId = active.id.replace('card-', '');
+    const cardId = active.data.current.id;
+    const next = { ...placements };
+    const fromSlot = Object.keys(next).find((key) => next[key] === cardId);
+    if (fromSlot) delete next[fromSlot];
 
-    if (!over) {
-      return;
+    if (over.id !== 'deck') {
+      const displaced = placements[over.id];
+      next[over.id] = cardId;
+      // Swap when moving between occupied slots; a card displaced by one from the deck returns to the deck.
+      if (displaced !== undefined && displaced !== cardId && fromSlot) next[fromSlot] = displaced;
     }
 
-    // Check if drop target is the Deck
-    if (over.id === 'deck') {
-      setPlacements(prev => {
-        const next = { ...prev };
-        // Find key having this cardId and delete
-        Object.keys(next).forEach(key => {
-          if (next[key] === parseInt(cardId)) delete next[key];
-        });
-        return next;
-      });
-      return;
-    }
-
-    // Dropped on a Slot
-    const slotId = over.id; // e.g., 'slot- -4-0'
-
-    setPlacements(prev => {
-      const next = { ...prev };
-      const occupiedCardId = next[slotId];
-
-      // Remove card from old slot if it was placed somewhere
-      let oldSlot = null;
-      Object.keys(next).forEach(key => {
-        if (next[key] === parseInt(cardId)) {
-          oldSlot = key;
-          delete next[key];
-        }
-      });
-
-      // Place new card
-      next[slotId] = parseInt(cardId);
-
-      // If swapped, move occupiedCardId to oldSlot or back to deck
-      if (occupiedCardId) {
-        if (oldSlot) {
-          next[oldSlot] = occupiedCardId; // Swap
-        } else {
-          // No old slot (came from deck), so occupied goes to deck (effectively removed from placements)
-        }
-      }
-
-      return next;
-    });
+    if (fromSlot === over.id) return;
+    if (!fromSlot && over.id === 'deck') return;
+    onChange(next);
   };
 
-  // Helper to get active card data for Overlay
-  const activeCard = items.find(i => i.id === parseInt(activeId));
-
-  const { t } = useTranslation();
-
-  // Render Logic
-  const renderColumns = () => {
-    const scores = Object.keys(distribution).map(Number).sort((a, b) => a - b);
-
-    return scores.map(score => {
-      const count = distribution[score];
-      return (
-        <Column key={score}>
-          <ExtremeLabel>
-            {score === -4 ? t('sort.stronglyDisagree') : (score === 4 ? t('sort.stronglyAgree') : '')}
-          </ExtremeLabel>
-          <ColumnHeader $score={score}>{score > 0 ? `+${score}` : info_score(score)}</ColumnHeader>
-          {Array.from({ length: count }).map((_, idx) => {
-            const slotId = `slot-${score}-${idx}`;
-            const cardId = placements[slotId];
-            const card = items.find(i => i.id === cardId);
-            return (
-              <DropZone
-                key={slotId}
-                id={slotId}
-                score={score}
-                currentCard={card}
-              />
-            );
-          })}
-        </Column>
-      );
-    });
-  };
-
-  const info_score = (s) => s; // helper
-
-  // Remaining items
-  const placedIds = Object.values(placements);
-  const remainingItems = items.filter(i => !placedIds.includes(i.id));
-
-  // Determine completion
-  const isComplete = items.length > 0 && placedIds.length === items.length;
-
-  useEffect(() => {
-    if (onComplete) onComplete(placements, isComplete);
-  }, [placements, isComplete]);
+  const activeCard = activeId != null ? statementsById.get(activeId) : null;
 
   return (
     <DndContext
@@ -294,39 +187,47 @@ const QSortBoard = ({ statements, distribution, onComplete }) => {
       collisionDetection={pointerWithin}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={() => setActiveId(null)}
     >
       <BoardContainer>
-        <ScaledWrapper ref={wrapperRef}>
+        <ScaledWrapper ref={wrapperRef} style={{ height }}>
           <PyramidContent ref={contentRef} style={{ transform: `scale(${scale})` }}>
-            {renderColumns()}
+            {SCORES.map((score, column) => (
+              <Column key={score}>
+                <ExtremeLabel $score={score}>
+                  {column === 0 && t('sort.stronglyDisagree')}
+                  {column === SCORES.length - 1 && t('sort.stronglyAgree')}
+                </ExtremeLabel>
+                <ColumnHeader $score={score}>{score > 0 ? `+${score}` : score}</ColumnHeader>
+                {Array.from({ length: distribution[column] }, (_, index) => {
+                  const id = slotId(score, index);
+                  return <DropZone key={id} id={id} currentCard={statementsById.get(placements[id])} />;
+                })}
+              </Column>
+            ))}
           </PyramidContent>
         </ScaledWrapper>
 
-        {/* Deck as a Droppable area allows returning strings */}
-        <DeckContainerWrapper id="deck">
-          <DeckTitle>Remaining Statements ({remainingItems.length})</DeckTitle>
-
-          {/* Group remaining items by category */}
-          {Object.entries(remainingItems.reduce((acc, item) => {
-            const cat = item.category || 'Other';
-            if (!acc[cat]) acc[cat] = [];
-            acc[cat].push(item);
-            return acc;
-          }, {})).map(([category, items]) => (
+        <DeckDropArea>
+          <DeckTitle>
+            {t('sort.remaining_statements')}
+            <Count>{remainingCount}</Count>
+          </DeckTitle>
+          {remainingByCategory.map(([category, items]) => (
             <CategoryGroup key={category}>
-              <CategoryTitle>{category}</CategoryTitle>
-              <CardsList>
-                {items.map(item => (
+              {category && <CategoryTitle>{category}</CategoryTitle>}
+              <CardsGrid>
+                {items.map((item) => (
                   <DraggableCard key={item.id} id={item.id} text={item.text} />
                 ))}
-              </CardsList>
+              </CardsGrid>
             </CategoryGroup>
           ))}
-        </DeckContainerWrapper>
+        </DeckDropArea>
       </BoardContainer>
 
-      <DragOverlay className="drag-overlay">
-        {activeId ? <DraggableCard id={activeId} text={activeCard?.text} /> : null}
+      <DragOverlay className="drag-overlay" dropAnimation={null}>
+        {activeCard && <CardView id={activeCard.id} text={activeCard.text} overlay style={{ width: 260 }} />}
       </DragOverlay>
     </DndContext>
   );

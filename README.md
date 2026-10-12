@@ -1,16 +1,21 @@
-# React + Vite
+# Q-Sort
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Participant URLs: `/<experimentId>/<lang>` (e.g. `/virtual-idol/ko`). Old links (`/ko`, `/en`) redirect to `/kpop/...`.
+Admin: `/admin/<experimentId>`.
 
-Currently, two official plugins are available:
+## Adding an experiment
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Convert the statement sheet to `src/experiments/<id>.json` (`{ "ko": [{ "id", "text", "category" }], ... }`). Source sheets live in `data/`.
+2. Register it in `src/experiments/index.js` with its languages, column distribution (-4…+4), and landing-page preference key (strings under `preference.<key>` in `src/locales/*.json`).
 
-## React Compiler
+## Database
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+All experiments share `q_method_results`; `results` is JSONB (`{ statementId: score }`), so statement counts can differ per experiment.
+Each participant session is upserted by `session_id` on every action (`status = in_progress`) and marked `completed` on submit.
 
-## Expanding the ESLint configuration
+Schema changes live in `scripts/migrate.sql` (idempotent):
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```sh
+vercel env pull .env.local
+node --env-file=.env.local scripts/migrate.mjs
+```

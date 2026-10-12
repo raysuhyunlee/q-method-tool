@@ -1,56 +1,52 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-const SelectorContainer = styled.div`
+const LABELS = { ko: '한국어', en: 'English' };
+
+const Group = styled.div`
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: var(--space-4);
+  right: var(--space-4);
   display: flex;
-  gap: 10px;
-  z-index: 1000;
+  padding: 2px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  z-index: 10;
 `;
 
-const LangButton = styled.button`
-  background: ${props => props.$active ? '#fff' : 'rgba(255, 255, 255, 0.2)'};
-  color: ${props => props.$active ? '#333' : '#fff'};
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(5px);
+const Option = styled.button`
+  padding: var(--space-1) var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: ${({ $active }) => ($active ? 'var(--surface)' : 'transparent')};
+  box-shadow: ${({ $active }) => ($active ? 'var(--shadow-sm)' : 'none')};
+  color: ${({ $active }) => ($active ? 'var(--text)' : 'var(--text-muted)')};
+  font-size: var(--font-sm);
   font-weight: 600;
-
-  &:hover {
-    background: ${props => props.$active ? '#fff' : 'rgba(255, 255, 255, 0.4)'};
-  }
+  cursor: pointer;
 `;
 
-const LanguageSelector = () => {
-  const { i18n } = useTranslation();
+const LanguageSelector = ({ languages }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { lang } = useParams();
+  const { experimentId, lang } = useParams();
 
-  const changeLanguage = (newLang) => {
-    if (newLang === lang) return;
-
-    i18n.changeLanguage(newLang);
-    const newPath = location.pathname.replace(/^\/(en|ko)/, `/${newLang}`);
-    navigate(newPath);
+  const changeLanguage = (next) => {
+    if (next === lang) return;
+    const rest = location.pathname.slice(`/${experimentId}/${lang}`.length);
+    navigate(`/${experimentId}/${next}${rest}`);
   };
 
   return (
-    <SelectorContainer>
-      <LangButton $active={lang === 'ko'} onClick={() => changeLanguage('ko')}>
-        한국어
-      </LangButton>
-      <LangButton $active={lang === 'en'} onClick={() => changeLanguage('en')}>
-        English
-      </LangButton>
-    </SelectorContainer>
+    <Group role="group" aria-label="Language">
+      {languages.map((code) => (
+        <Option key={code} $active={code === lang} aria-pressed={code === lang} onClick={() => changeLanguage(code)}>
+          {LABELS[code] ?? code}
+        </Option>
+      ))}
+    </Group>
   );
 };
 

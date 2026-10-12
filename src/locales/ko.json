@@ -1,37 +1,50 @@
 {
   "landing": {
-    "title": "Q-Sort에 오신 것을 환영합니다",
-    "description": "시작하려면 정보를 입력해주세요.",
     "name": "이름",
     "age": "나이",
     "gender": "성별",
     "gender_male": "남성",
     "gender_female": "여성",
     "gender_other": "기타",
-    "kpop_preference": "K-pop 선호도",
-    "kpop_high": "매우 관심 있음",
-    "kpop_medium": "적당히 관심 있음",
-    "kpop_low": "잘 모름",
-    "start_button": "Q-Sort 시작하기"
+    "select": "선택",
+    "start_button": "시작하기",
+    "continue_button": "이어서 하기",
+    "error_name": "이름을 입력해 주세요.",
+    "error_age": "나이를 숫자로 입력해 주세요.",
+    "error_required": "항목을 선택해 주세요."
+  },
+  "preference": {
+    "kpop": {
+      "label": "K-pop 선호도",
+      "high": "매우 관심 있음",
+      "medium": "적당히 관심 있음",
+      "low": "잘 모름"
+    },
+    "virtualIdol": {
+      "label": "버추얼 아이돌 선호도",
+      "high": "매우 관심 있음",
+      "medium": "적당히 관심 있음",
+      "low": "잘 모름"
+    }
   },
   "sort": {
-    "instruction": "진술문을 동의하는 정도에 따라 피라미드 칸에 배치해주세요.",
-    "agree": "동의함",
-    "disagree": "동의하지 않음",
-    "neutral": "중립",
+    "instruction": "각 진술문을 동의하는 정도에 따라 칸에 끌어다 놓아 주세요.",
     "remaining_statements": "남은 진술문",
-    "finish_button": "완료",
-    "stronglyDisagree": "매우 동의하지 않음",
+    "finish_button": "제출",
+    "submitting": "제출 중…",
+    "stronglyDisagree": "전혀 동의하지 않음",
     "stronglyAgree": "매우 동의함",
-    "saving": "저장 중...",
-    "retry_button": "저장 재시도",
-    "save_success": "저장 완료!",
-    "save_failed": "저장에 실패했습니다. 다시 시도해 주세요."
+    "save_failed": "진행 상황을 서버에 저장하지 못했습니다. 이 기기에는 보관되어 있으니 인터넷 연결을 확인한 뒤 다시 시도해 주세요.",
+    "retry_button": "다시 시도",
+    "submit_failed": "제출하지 못했습니다. 배치는 유지되어 있으니 인터넷 연결을 확인한 뒤 다시 제출해 주세요."
   },
   "finish": {
-    "title": "감사합니다!",
-    "description": "데이터가 성공적으로 저장되었습니다.",
-    "save_success_message": "참여해 주셔서 감사합니다!",
-    "restart_button": "다시 시작"
+    "title": "참여해 주셔서 감사합니다",
+    "description": "응답이 저장되었습니다.",
+    "restart_button": "새 응답 시작"
+  },
+  "common": {
+    "loading": "불러오는 중…",
+    "not_found": "존재하지 않는 실험입니다."
   }
 }

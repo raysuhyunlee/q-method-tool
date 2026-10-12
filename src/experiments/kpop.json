@@ -1,0 +1,336 @@
+{
+  "ko": [
+    {
+      "id": 1,
+      "text": "K-pop 소속사 시스템은 체계적이며 아티스트 성공 확률을 높여준다.",
+      "category": "소속사 시스템"
+    },
+    {
+      "id": 2,
+      "text": "소속사는 아이돌을 과도하게 통제하며 개인의 자율성을 제한한다.",
+      "category": "소속사 시스템"
+    },
+    {
+      "id": 3,
+      "text": "K-pop 소속사는 미국보다 훨씬 적극적으로 아티스트를 육성한다고 본다.",
+      "category": "소속사 시스템"
+    },
+    {
+      "id": 4,
+      "text": "기획사의 지나친 간섭은 창작의 자유와 예술성을 심각하게 훼손한다고 느낀다.",
+      "category": "소속사 시스템"
+    },
+    {
+      "id": 5,
+      "text": "연습생 시스템은 글로벌 경쟁력을 만든 핵심이며 매우 효과적이다.",
+      "category": "트레이닝·연습생 시스템"
+    },
+    {
+      "id": 6,
+      "text": "장기간 연습생 생활은 비인간적이며 청소년에게 해롭다고 느낀다.",
+      "category": "트레이닝·연습생 시스템"
+    },
+    {
+      "id": 7,
+      "text": "철저한 훈련이 있어야 현재 수준의 K-pop 퍼포먼스가 가능하다고 본다.",
+      "category": "트레이닝·연습생 시스템"
+    },
+    {
+      "id": 8,
+      "text": "미국식 ‘데뷔 후 성장’ 모델이 아이들에게 훨씬 건강하다고 생각한다.",
+      "category": "트레이닝·연습생 시스템"
+    },
+    {
+      "id": 9,
+      "text": "어린 연습생을 데뷔시키는 것은 윤리적으로 심각한 문제라고 본다.",
+      "category": "트레이닝·연습생 시스템"
+    },
+    {
+      "id": 10,
+      "text": "칼군무는 K-pop 정체성을 대표하는 핵심 요소라고 생각한다.",
+      "category": "퍼포먼스·음악 스타일"
+    },
+    {
+      "id": 11,
+      "text": "군무 중심 구조는 멤버 개성과 예술적 다양성을 없앤다고 느낀다.",
+      "category": "퍼포먼스·음악 스타일"
+    },
+    {
+      "id": 12,
+      "text": "K-pop은 퍼포먼스·비주얼 중심이라 음악 자체의 진정성이 약하다고 본다.",
+      "category": "퍼포먼스·음악 스타일"
+    },
+    {
+      "id": 13,
+      "text": "K-pop의 작곡·프로듀싱 방식은 글로벌 트렌드에 잘 맞고 경쟁력이 높다.",
+      "category": "퍼포먼스·음악 스타일"
+    },
+    {
+      "id": 14,
+      "text": "아이돌의 노동 시간과 스케줄은 과도하게 빡빡하고 건강에 해롭다고 본다.",
+      "category": "아이돌 노동 환경·계약"
+    },
+    {
+      "id": 15,
+      "text": "K-pop 산업은 최근 정신건강 보호와 복지를 강화하는 방향으로 발전하고 있다고 느낀다.",
+      "category": "아이돌 노동 환경·계약"
+    },
+    {
+      "id": 16,
+      "text": "아이돌은 소속사가 만든 ‘상품 이미지’에 지나치게 묶여 있다고 느낀다.",
+      "category": "아이돌 노동 환경·계약"
+    },
+    {
+      "id": 17,
+      "text": "조직적이고 헌신적인 한국 팬덤은 K-pop 성공의 핵심 요인이다.",
+      "category": "팬덤 시스템"
+    },
+    {
+      "id": 18,
+      "text": "팬덤의 과열 경쟁(스트리밍·투표)은 비건전하며 아티스트에게도 부담이 된다.",
+      "category": "팬덤 시스템"
+    },
+    {
+      "id": 19,
+      "text": "K-pop 팬덤은 미국 팬덤보다 공동체성이 강해 긍정적이라고 느낀다.",
+      "category": "팬덤 시스템"
+    },
+    {
+      "id": 20,
+      "text": "소속사는 팬들의 충성도를 상품화하여 앨범, 굿즈, 콘서트 등으로 과소비를 유도한다.",
+      "category": "팬덤 시스템"
+    },
+    {
+      "id": 21,
+      "text": "미국 현지 멤버를 포함하는 전략은 K-pop의 글로벌 확장에 도움이 된다.",
+      "category": "글로벌 전략·현지화"
+    },
+    {
+      "id": 22,
+      "text": "K-pop이 미국 시장 중심으로 변하면서 본래의 색깔을 잃고 있다고 생각한다.",
+      "category": "글로벌 전략·현지화"
+    },
+    {
+      "id": 23,
+      "text": "한국식 훈련·규율은 미국의 가치관(자유·자율성)과 근본적으로 충돌한다고 본다.",
+      "category": "문화적 충돌·미국 vs 한국 인식"
+    },
+    {
+      "id": 24,
+      "text": "미국 아티스트들도 K-pop식 훈련을 받으면 실력이 크게 향상될 수 있다고 생각한다.",
+      "category": "문화적 충돌·미국 vs 한국 인식"
+    },
+    {
+      "id": 25,
+      "text": "미국 시장에서는 K-pop식 통제·규율에 대한 거부감이 매우 크다고 느낀다.",
+      "category": "문화적 충돌·미국 vs 한국 인식"
+    },
+    {
+      "id": 26,
+      "text": "K-pop 아이돌은 ‘완성형 아티스트’라기보다 ‘제조된 상품’이라는 인식이 미국에서 강하다고 느낀다.",
+      "category": "문화적 충돌·미국 vs 한국 인식"
+    },
+    {
+      "id": 27,
+      "text": "K-pop이 개인의 표현보다 집단의 완벽함과 그룹 통일성을 우선시하는 점을 긍정적으로 평가하며, 이는 개인적 예술성을 강조하는 미국과 다르다.",
+      "category": "문화적 충돌·미국 vs 한국 인식"
+    },
+    {
+      "id": 28,
+      "text": "K-pop은 한국 경제와 문화산업 발전에 매우 중요한 기여를 한다고 생각한다.",
+      "category": "산업적 가치·비판"
+    },
+    {
+      "id": 29,
+      "text": "경쟁·순위 중심 시스템은 아티스트의 창의성과 정신건강을 해친다고 느낀다.",
+      "category": "산업적 가치·비판"
+    },
+    {
+      "id": 30,
+      "text": "K-pop 산업은 지나치게 상업적이며 예술성보다 시장성을 우선한다고 본다.",
+      "category": "산업적 가치·비판"
+    },
+    {
+      "id": 31,
+      "text": "서구권 멤버가 많은 그룹은 K-pop의 다양성과 포용성을 확장한다고 느낀다.",
+      "category": "글로벌 그룹 및 최신 사례"
+    },
+    {
+      "id": 32,
+      "text": "문화적 갈등·오해는 글로벌 K-pop 성장 과정에서 자연스러운 현상이라고 본다.",
+      "category": "글로벌 그룹 및 최신 사례"
+    },
+    {
+      "id": 33,
+      "text": "미국식 운영 방식으로는 K-pop식 성공 요소(훈련·시스템)를 재현하기 어렵다고 느낀다.",
+      "category": "글로벌 그룹 및 최신 사례"
+    }
+  ],
+  "en": [
+    {
+      "id": 1,
+      "text": "The K-pop agency system is systematic and increases artists' likelihood of success.",
+      "category": "Agency System"
+    },
+    {
+      "id": 2,
+      "text": "Agencies excessively control idols and restrict their personal autonomy.",
+      "category": "Agency System"
+    },
+    {
+      "id": 3,
+      "text": "K-pop agencies cultivate artists much more actively than in the United States.",
+      "category": "Agency System"
+    },
+    {
+      "id": 4,
+      "text": "Excessive agency interference seriously undermines creative freedom and artistic integrity.",
+      "category": "Agency System"
+    },
+    {
+      "id": 5,
+      "text": "The trainee system is highly effective and is key to creating global competitiveness.",
+      "category": "Training System"
+    },
+    {
+      "id": 6,
+      "text": "The prolonged trainee period is inhumane and harmful to adolescents.",
+      "category": "Training System"
+    },
+    {
+      "id": 7,
+      "text": "Rigorous training is necessary to achieve the current level of K-pop performance.",
+      "category": "Training System"
+    },
+    {
+      "id": 8,
+      "text": "The American 'grow after debut' model is much healthier for young people.",
+      "category": "Training System"
+    },
+    {
+      "id": 9,
+      "text": "Debuting young trainees is a serious ethical problem.",
+      "category": "Training System"
+    },
+    {
+      "id": 10,
+      "text": "Synchronized choreography is a core element representing K-pop's identity.",
+      "category": "Performance & Style"
+    },
+    {
+      "id": 11,
+      "text": "The group dance-centered structure eliminates individual member personalities and artistic diversity.",
+      "category": "Performance & Style"
+    },
+    {
+      "id": 12,
+      "text": "K-pop's focus on performance and visuals weakens the authenticity of the music itself.",
+      "category": "Performance & Style"
+    },
+    {
+      "id": 13,
+      "text": "K-pop's composition and production methods align well with global trends and are highly competitive.",
+      "category": "Performance & Style"
+    },
+    {
+      "id": 14,
+      "text": "Idols' working hours and schedules are excessively demanding and harmful to their health.",
+      "category": "Labor & Contract"
+    },
+    {
+      "id": 15,
+      "text": "The K-pop industry is evolving toward strengthening mental health protection and welfare.",
+      "category": "Labor & Contract"
+    },
+    {
+      "id": 16,
+      "text": "Idols are overly bound to the 'product image' created by their agencies.",
+      "category": "Labor & Contract"
+    },
+    {
+      "id": 17,
+      "text": "The organized and dedicated Korean fandom is a key factor in K-pop's success.",
+      "category": "Fandom System"
+    },
+    {
+      "id": 18,
+      "text": "Excessive fandom competition (streaming, voting) is unhealthy and burdensome for artists.",
+      "category": "Fandom System"
+    },
+    {
+      "id": 19,
+      "text": "K-pop fandoms have stronger community bonds than American fandoms, which is positive.",
+      "category": "Fandom System"
+    },
+    {
+      "id": 20,
+      "text": "Agencies commodify fans' loyalty to induce overconsumption through albums, merchandise, and concerts.",
+      "category": "Fandom System"
+    },
+    {
+      "id": 21,
+      "text": "The strategy of including American members helps K-pop's global expansion.",
+      "category": "Global Strategy & Localization"
+    },
+    {
+      "id": 22,
+      "text": "K-pop is losing its original character as it becomes increasingly centered on the American market.",
+      "category": "Global Strategy & Localization"
+    },
+    {
+      "id": 23,
+      "text": "Korean-style training and discipline fundamentally conflict with American values (freedom and autonomy).",
+      "category": "Cultural Differences"
+    },
+    {
+      "id": 24,
+      "text": "American artists could significantly improve their skills if they received K-pop-style training.",
+      "category": "Cultural Differences"
+    },
+    {
+      "id": 25,
+      "text": "There is strong resistance to K-pop-style control and discipline in the American market.",
+      "category": "Cultural Differences"
+    },
+    {
+      "id": 26,
+      "text": "In the United States, there is a strong perception that K-pop idols are 'manufactured products' rather than 'complete artists.'",
+      "category": "Cultural Differences"
+    },
+    {
+      "id": 27,
+      "text": "K-pop's prioritization of collective perfection and group unity over individual expression is positive, which differs from America's emphasis on personal artistry.",
+      "category": "Cultural Differences"
+    },
+    {
+      "id": 28,
+      "text": "K-pop makes very important contributions to Korea's economy and cultural industry development.",
+      "category": "Industry Structure & Commercialization"
+    },
+    {
+      "id": 29,
+      "text": "Competition and ranking-centered systems harm artists' creativity and mental health.",
+      "category": "Industry Structure & Commercialization"
+    },
+    {
+      "id": 30,
+      "text": "The K-pop industry is overly commercial and prioritizes marketability over artistry.",
+      "category": "Industry Structure & Commercialization"
+    },
+    {
+      "id": 31,
+      "text": "Groups with many Western members expand K-pop's diversity and inclusivity.",
+      "category": "Global K-pop Identity"
+    },
+    {
+      "id": 32,
+      "text": "Cultural conflicts and misunderstandings are natural phenomena in K-pop's global growth process.",
+      "category": "Global K-pop Identity"
+    },
+    {
+      "id": 33,
+      "text": "It is difficult to replicate K-pop's success factors (training and system) with American management methods.",
+      "category": "Global K-pop Identity"
+    }
+  ]
+}

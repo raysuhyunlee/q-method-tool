@@ -1,0 +1,184 @@
+{
+  "ko": [
+    {
+      "id": 1,
+      "text": "가상아이돌도 자기 생각이 있는 것처럼 느껴진다.",
+      "category": "A. Mind Perception — 마음 지각"
+    },
+    {
+      "id": 2,
+      "text": "가상아이돌은 자신의 의지로 행동하는 것처럼 느껴진다.",
+      "category": "A. Mind Perception — 마음 지각"
+    },
+    {
+      "id": 3,
+      "text": "가상아이돌도 기쁨이나 슬픔을 실제로 느끼는 것처럼 보인다.",
+      "category": "A. Mind Perception — 마음 지각"
+    },
+    {
+      "id": 4,
+      "text": "가상아이돌의 감정 표현은 실제 감정보다 연기에 가깝다고 생각한다.",
+      "category": "A. Mind Perception — 마음 지각"
+    },
+    {
+      "id": 5,
+      "text": "가상아이돌의 라이브 방송을 보면 실제 누군가와 함께 있는 것처럼 느껴진다.",
+      "category": "B. Social Presence / CASA — 사회적 실재감"
+    },
+    {
+      "id": 6,
+      "text": "가상아이돌이 팬들의 말에 즉각적으로 반응하면 실제 대화를 나누는 것처럼 느껴진다.",
+      "category": "B. Social Presence / CASA — 사회적 실재감"
+    },
+    {
+      "id": 7,
+      "text": "가상아이돌에게도 실제 사람을 대하듯 예의를 지켜야 한다고 생각한다.",
+      "category": "B. Social Presence / CASA — 사회적 실재감"
+    },
+    {
+      "id": 8,
+      "text": "가상아이돌의 행동이 자연스러우면 디지털 캐릭터라는 사실을 잊게 된다.",
+      "category": "B. Social Presence / CASA — 사회적 실재감"
+    },
+    {
+      "id": 9,
+      "text": "가상아이돌은 실제 사람처럼 생길수록 더 매력적이라고 생각한다.",
+      "category": "C. Embodiment / Anthropomorphism — 체화와 의인화"
+    },
+    {
+      "id": 10,
+      "text": "가상아이돌의 표정은 그 아이돌의 감정을 이해하는 데 도움이 된다.",
+      "category": "C. Embodiment / Anthropomorphism — 체화와 의인화"
+    },
+    {
+      "id": 11,
+      "text": "가상아이돌의 춤과 몸짓이 자연스러울수록 무대에 몰입하게 된다.",
+      "category": "C. Embodiment / Anthropomorphism — 체화와 의인화"
+    },
+    {
+      "id": 12,
+      "text": "가상아이돌의 외모는 그 아이돌을 알아보는 데 중요한 요소다.",
+      "category": "C. Embodiment / Anthropomorphism — 체화와 의인화"
+    },
+    {
+      "id": 13,
+      "text": "가상아이돌을 좋아할 때는 캐릭터보다 그 뒤에서 활동하는 실제 사람이 더 중요하다.",
+      "category": "D. Source / Control / Identity — 주체와 정체성"
+    },
+    {
+      "id": 14,
+      "text": "가상아이돌의 캐릭터는 실제 수행자와 별개로 좋아할 수 있다.",
+      "category": "D. Source / Control / Identity — 주체와 정체성"
+    },
+    {
+      "id": 15,
+      "text": "가상아이돌의 말과 행동을 실제로 누가 만들어내는지 알고 싶다.",
+      "category": "D. Source / Control / Identity — 주체와 정체성"
+    },
+    {
+      "id": 16,
+      "text": "가상아이돌의 말과 행동을 AI가 만들어낸다면 매력이 떨어질 것 같다.",
+      "category": "D. Source / Control / Identity — 주체와 정체성"
+    },
+    {
+      "id": 17,
+      "text": "가상아이돌은 시간이 지나도 성격이 크게 바뀌지 않는 것이 좋다.",
+      "category": "D. Source / Control / Identity — 주체와 정체성"
+    },
+    {
+      "id": 18,
+      "text": "가상아이돌의 외모가 완전히 바뀌어도 같은 아이돌로 받아들일 수 있다.",
+      "category": "D. Source / Control / Identity — 주체와 정체성"
+    },
+    {
+      "id": 19,
+      "text": "가상아이돌의 실제 수행자가 바뀌면 같은 캐릭터라도 다른 아이돌이라고 생각한다.",
+      "category": "D. Source / Control / Identity — 주체와 정체성"
+    },
+    {
+      "id": 20,
+      "text": "가상아이돌의 활동이 기획사의 계획에 따라 이루어진다는 사실은 흥미를 떨어뜨린다.",
+      "category": "D. Source / Control / Identity — 주체와 정체성"
+    },
+    {
+      "id": 21,
+      "text": "가상아이돌에게도 실제 사람을 좋아할 때와 비슷한 애정을 느낄 수 있다.",
+      "category": "E. Relationality / Reciprocity — 관계성과 상호성"
+    },
+    {
+      "id": 22,
+      "text": "가상아이돌이 나를 기억하거나 알아봐 준다면 더 친밀하게 느껴질 것 같다.",
+      "category": "E. Relationality / Reciprocity — 관계성과 상호성"
+    },
+    {
+      "id": 23,
+      "text": "팬들의 의견이 가상아이돌의 활동에 반영되는 것은 중요하다.",
+      "category": "E. Relationality / Reciprocity — 관계성과 상호성"
+    },
+    {
+      "id": 24,
+      "text": "가상아이돌을 오랫동안 좋아할수록 더 가깝게 느껴질 것 같다.",
+      "category": "E. Relationality / Reciprocity — 관계성과 상호성"
+    },
+    {
+      "id": 25,
+      "text": "가상아이돌이 내 존재를 알지 못하더라도 그 아이돌을 좋아하는 마음은 의미가 있다.",
+      "category": "E. Relationality / Reciprocity — 관계성과 상호성"
+    },
+    {
+      "id": 26,
+      "text": "가상아이돌에게 느끼는 친밀감은 실제 사람에게 느끼는 친밀감과는 다르다.",
+      "category": "E. Relationality / Reciprocity — 관계성과 상호성"
+    },
+    {
+      "id": 27,
+      "text": "가상인간도 음악 활동을 잘한다면 아이돌이 될 수 있다고 생각한다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 28,
+      "text": "가상아이돌에게는 노래 실력보다 캐릭터의 매력이 더 중요하다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 29,
+      "text": "아이돌을 아이돌답게 만드는 가장 중요한 요소는 그를 응원하는 팬덤의 존재다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 30,
+      "text": "가상아이돌이 데뷔 후 성장하는 모습을 보면 더 응원하고 싶어진다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 31,
+      "text": "가상아이돌의 실제 수행자가 음악 제작에 참여하면 그 아이돌을 더 높이 평가하게 된다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 32,
+      "text": "가상아이돌이 무대에서 실수하면 오히려 더 친근하게 느껴진다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 33,
+      "text": "가상아이돌이 팬들과 꾸준히 소통하는 것은 음악 활동만큼 중요하다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 34,
+      "text": "가상아이돌 뒤에 실제 사람이 없다면 아이돌이라고 인정하기 어렵다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 35,
+      "text": "가상아이돌도 인간 아이돌과 같은 기준으로 음악적 성과를 평가받아야 한다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    },
+    {
+      "id": 36,
+      "text": "가상아이돌은 현실에서 불가능한 무대를 보여줄 수 있다는 점이 매력적이다.",
+      "category": "F. Idolhood / Performance / Fandom — 아이돌성"
+    }
+  ]
+}

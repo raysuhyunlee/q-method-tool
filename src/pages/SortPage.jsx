@@ -1,107 +1,109 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
-import QSortBoard from '../components/QSortBoard';
-import { parseExcel } from '../utils/excelParser';
-import { generateDistribution } from '../utils/distribution';
+import { Navigate, useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSession } from '../context/SessionContext';
+import QSortBoard from '../components/QSortBoard';
+import { Alert, Button, TextButton } from '../components/ui';
+import { getStatements } from '../experiments';
 
 const PageContainer = styled.div`
   width: 100%;
-  padding: 80px 20px 20px;
+  max-width: 1440px;
+  padding: var(--space-7) var(--space-4) var(--space-6);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: var(--space-5);
 `;
 
 const Header = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 5;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  width: 100%;
-  max-width: 1200px;
   align-items: center;
-  margin-bottom: 20px;
-  color: white;
+  gap: var(--space-3) var(--space-5);
+  padding: var(--space-3) 0;
+  background: var(--bg);
 `;
 
-const Title = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 700;
-`;
-
-const Button = styled.button`
-  padding: 10px 24px;
-  border-radius: 8px;
-  background: ${props => props.disabled ? '#475569' : 'var(--success-color)'};
-  color: white;
-  border: none;
+const Instruction = styled.p`
+  font-size: var(--font-lg);
   font-weight: 600;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  transition: all 0.2s;
-  
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-  }
 `;
 
-const Loading = styled.div`
-  color: white;
-  font-size: 1.2rem;
-  margin-top: 50px;
+const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+`;
+
+const Progress = styled.span`
+  color: var(--text-muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 `;
 
 const SortPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { lang } = useParams();
-  const { prepResults } = useUser();
+  const { experimentId, lang } = useParams();
+  const experiment = useOutletContext();
+  const { userData, placements, completed, saveState, update, flush, complete } = useSession();
+  const [submitting, setSubmitting] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
 
-  const [statements, setStatements] = useState([]);
-  const [distribution, setDistribution] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [isComplete, setIsComplete] = useState(false);
-  const [currentPlacements, setCurrentPlacements] = useState({});
+  const statements = useMemo(() => getStatements(experiment, i18n.language), [experiment, i18n.language]);
 
-  useEffect(() => {
-    const init = async () => {
-      // In production/dev, file is at root of public
-      const data = await parseExcel('/Q-Method_Statement.xlsx', lang);
-      setStatements(data);
-      setDistribution(generateDistribution(data.length));
-      setLoading(false);
-    };
-    init();
-  }, [lang]);
+  if (completed) return <Navigate to={`/${experimentId}/${lang}/finish`} replace />;
+  if (!userData.name) return <Navigate to={`/${experimentId}/${lang}`} replace />;
 
-  const handleComplete = (placements, complete) => {
-    setCurrentPlacements(placements);
-    setIsComplete(complete);
+  const placedCount = Object.keys(placements).length;
+  const isComplete = placedCount === statements.length;
+
+  const handleChange = (next) => {
+    setSubmitFailed(false);
+    update({ placements: next });
   };
 
-  const onFinish = () => {
-    if (!isComplete) return;
-    prepResults(currentPlacements);
-    navigate(`/${lang}/finish`);
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    const ok = await complete();
+    setSubmitting(false);
+    if (ok) navigate(`/${experimentId}/${lang}/finish`);
+    else setSubmitFailed(true);
   };
-
-  if (loading) return <Loading>Loading Q-Statements...</Loading>;
-  if (statements.length === 0) return <Loading>No statements found or error loading file.</Loading>;
 
   return (
     <PageContainer>
       <Header>
-        <Title>{t('sort.instruction')}</Title>
-        <Button onClick={onFinish} disabled={!isComplete}>
-          {t('sort.finish_button')}
-        </Button>
+        <Instruction>{t('sort.instruction')}</Instruction>
+        <Actions>
+          <Progress aria-label={`${placedCount} / ${statements.length}`}>
+            {placedCount} / {statements.length}
+          </Progress>
+          <Button onClick={handleSubmit} disabled={!isComplete || submitting}>
+            {t(submitting ? 'sort.submitting' : 'sort.finish_button')}
+          </Button>
+        </Actions>
       </Header>
+
+      {submitFailed ? (
+        <Alert role="alert">{t('sort.submit_failed')}</Alert>
+      ) : saveState === 'error' && (
+        <Alert role="alert">
+          <span>{t('sort.save_failed')}</span>
+          <TextButton onClick={flush}>{t('sort.retry_button')}</TextButton>
+        </Alert>
+      )}
 
       <QSortBoard
         statements={statements}
-        distribution={distribution}
-        onComplete={handleComplete}
+        distribution={experiment.distribution}
+        placements={placements}
+        onChange={handleChange}
       />
     </PageContainer>
   );

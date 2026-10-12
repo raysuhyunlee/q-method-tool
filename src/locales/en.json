@@ -1,37 +1,50 @@
 {
   "landing": {
-    "title": "Welcome to Q-Sort",
-    "description": "Please enter your details to begin.",
     "name": "Name",
     "age": "Age",
     "gender": "Gender",
     "gender_male": "Male",
     "gender_female": "Female",
     "gender_other": "Other",
-    "kpop_preference": "K-pop Preference",
-    "kpop_high": "Very Interested",
-    "kpop_medium": "Moderately Interested",
-    "kpop_low": "Not Familiar",
-    "start_button": "Start Q-Sort"
+    "select": "Select",
+    "start_button": "Start",
+    "continue_button": "Continue",
+    "error_name": "Enter your name.",
+    "error_age": "Enter your age as a number.",
+    "error_required": "Select an option."
+  },
+  "preference": {
+    "kpop": {
+      "label": "K-pop Preference",
+      "high": "Very Interested",
+      "medium": "Moderately Interested",
+      "low": "Not Familiar"
+    },
+    "virtualIdol": {
+      "label": "Virtual Idol Preference",
+      "high": "Very Interested",
+      "medium": "Moderately Interested",
+      "low": "Not Familiar"
+    }
   },
   "sort": {
-    "instruction": "Drag the statements into the pyramid slots based on how much you agree with them.",
-    "agree": "Agree",
-    "disagree": "Disagree",
-    "neutral": "Neutral",
-    "remaining_statements": "Remaining Statements",
-    "finish_button": "Finish",
+    "instruction": "Drag each statement into a slot based on how much you agree with it.",
+    "remaining_statements": "Remaining statements",
+    "finish_button": "Submit",
+    "submitting": "Submitting…",
     "stronglyDisagree": "Strongly Disagree",
     "stronglyAgree": "Strongly Agree",
-    "saving": "Saving...",
-    "retry_button": "Retry Save",
-    "save_success": "Saved!",
-    "save_failed": "Failed to save data. Please try again."
+    "save_failed": "Your progress couldn't be saved to the server. It's kept on this device, so check your connection and try again.",
+    "retry_button": "Try again",
+    "submit_failed": "Your sort couldn't be submitted. Your placements are kept, so check your connection and submit again."
   },
   "finish": {
-    "title": "Thank You!",
-    "description": "Your data has been saved successfully.",
-    "save_success_message": "Thank you for your participation!",
-    "restart_button": "Restart"
+    "title": "Thank you for participating",
+    "description": "Your response has been saved.",
+    "restart_button": "Start a new response"
+  },
+  "common": {
+    "loading": "Loading…",
+    "not_found": "This study doesn't exist."
   }
 }
